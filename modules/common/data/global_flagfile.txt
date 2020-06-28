@@ -22,3 +22,8 @@
 --map_dir=/apollo/modules/map/data/demo
 
 --map_dir=/apollo/modules/map/data/sunnyvale_big_loop
+
+--localization_tf2_child_frame_id=novatel
+--pointcloud_raw_topic=/apollo/sensor/velodyne16/PointCloud2
+--velodyne_raw_topic=/apollo/sensor/velodyne16/VelodyneScanUnified
+--pointcloud_topic=/apollo/sensor/velodyne16/compensator/PointCloud2

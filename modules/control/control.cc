@@ -251,7 +251,7 @@ void Control::OnTimer(const ros::TimerEvent &) {
   if (estop_) {
     control_command.mutable_header()->mutable_status()->set_msg(estop_reason_);
   }
-
+  
   SendCmd(&control_command);
 }
 

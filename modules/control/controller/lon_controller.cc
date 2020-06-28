@@ -344,13 +344,14 @@ void LonController::ComputeLongitudinalErrors(
   TrajectoryPoint preview_point =
       trajectory_analyzer->QueryNearestPointByAbsoluteTime(
           preview_control_time);
-
+  //if(reference_point.v()<=1.1){
+  //reference_point.set_v(1.5);
   ADEBUG << "matched point:" << matched_point.DebugString();
   ADEBUG << "reference point:" << reference_point.DebugString();
   ADEBUG << "preview point:" << preview_point.DebugString();
   debug->set_station_error(reference_point.path_point().s() - s_matched);
   debug->set_speed_error(reference_point.v() - s_dot_matched);
-
+  
   debug->set_station_reference(reference_point.path_point().s());
   debug->set_speed_reference(reference_point.v());
   debug->set_preview_station_error(preview_point.path_point().s() - s_matched);
@@ -358,6 +359,21 @@ void LonController::ComputeLongitudinalErrors(
   debug->set_preview_speed_reference(preview_point.v());
   debug->set_preview_acceleration_reference(preview_point.a());
   debug->set_current_station(s_matched);
+  //}else{
+  //ADEBUG << "matched point:" << matched_point.DebugString();
+  //ADEBUG << "reference point:" << reference_point.DebugString();
+  //ADEBUG << "preview point:" << preview_point.DebugString();
+  //debug->set_station_error(reference_point.path_point().s() - s_matched);
+  //debug->set_speed_error(reference_point.v() - s_dot_matched);
+  
+  //debug->set_station_reference(reference_point.path_point().s());
+  //debug->set_speed_reference(reference_point.v());
+  //debug->set_preview_station_error(preview_point.path_point().s() - s_matched);
+  //debug->set_preview_speed_error(preview_point.v() - s_dot_matched);
+  //debug->set_preview_speed_reference(preview_point.v());
+  //debug->set_preview_acceleration_reference(preview_point.a());
+  //debug->set_current_station(s_matched);
+  //}
 }
 
 void LonController::SetDigitalFilter(double ts, double cutoff_freq,

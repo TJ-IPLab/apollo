@@ -577,7 +577,21 @@ void MPCController::ComputeLongitudinalErrors(
   TrajectoryPoint reference_point =
       trajectory_analyzer->QueryNearestPointByAbsoluteTime(
           current_control_time);
+  //if(reference_point.v()<=1.1){
+  //reference_point.set_v(1.5);
+  //ADEBUG << "matched point:" << matched_point.DebugString();
+  //ADEBUG << "reference point:" << reference_point.DebugString();
+  //debug->set_station_error(reference_point.path_point().s() - s_matched);
+  //debug->set_speed_error(reference_point.v() - s_dot_matched);
 
+  //debug->set_station_reference(reference_point.path_point().s());
+  //debug->set_speed_reference(reference_point.v());
+  //debug->set_acceleration_reference(reference_point.a());
+
+  //debug->set_station_feedback(s_matched);
+  //debug->set_speed_feedback(
+    //  VehicleStateProvider::instance()->linear_velocity());
+  //}else{
   ADEBUG << "matched point:" << matched_point.DebugString();
   ADEBUG << "reference point:" << reference_point.DebugString();
   debug->set_station_error(reference_point.path_point().s() - s_matched);
@@ -590,6 +604,8 @@ void MPCController::ComputeLongitudinalErrors(
   debug->set_station_feedback(s_matched);
   debug->set_speed_feedback(
       VehicleStateProvider::instance()->linear_velocity());
+  //}
+  
 }
 
 }  // namespace control

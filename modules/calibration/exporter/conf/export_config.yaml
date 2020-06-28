@@ -5,5 +5,3 @@ topics:
         type: ApolloOdometry
     - /apollo/sensor/velodyne16/PointCloud2:
         type: PointCloud2
-    - /apollo/sensor/velodyne64/PointCloud2:
-        type: PointCloud2

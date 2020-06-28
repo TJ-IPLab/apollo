@@ -230,6 +230,7 @@ class AdapterManager {
     }
   }
 
+
  private:
   /// The node handler of ROS, owned by the \class AdapterManager
   /// singleton.

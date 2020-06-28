@@ -65,13 +65,6 @@ class RtkPlayer(object):
         self.chassis = chassis_pb2.Chassis()
         self.padmsg = pad_msg_pb2.PadMessage()
         self.localization_received = False
-
-        #self.carx = 329750.46895
-        #self.cary = 3463289.18247
-        #self.carz = 13.738377318
-        #self.localization_received = True
-        #self.liumingtime=0
-
         self.chassis_received = False
 
         self.planning_pub = rospy.Publisher(
@@ -104,9 +97,6 @@ class RtkPlayer(object):
         self.carx = self.localization.pose.position.x
         self.cary = self.localization.pose.position.y
         self.carz = self.localization.pose.position.z
-        #self.carx = 329743.74462
-        #self.cary = 3463288.69057
-       # self.carz = 13.7427589646
         self.localization_received = True
 
     def chassis_callback(self, data):
@@ -140,26 +130,17 @@ class RtkPlayer(object):
                          (self.starttime, self.closestpoint))
 
     def closest_dist(self):
-        #self.logger.info("=================start_search")
-        #self.liumingtime=self.liumingtime+1
-        #self.logger.info("=================start_search %s" % (self.liumingtime))
         shortest_dist_sqr = float('inf')
         self.logger.info("before closest self.start=%s" % (self.start))
         search_start = max(self.start - SEARCH_INTERVAL / 2, 0)
         search_end = min(self.start + SEARCH_INTERVAL / 2, len(self.data))
-        #self.logger.info("=================start_search %s>>>>>>>>>>>>>>> %s" % (search_start,search_end))
         start = self.start
         for i in range(search_start, search_end):
             dist_sqr = (self.carx - self.data['x'][i]) ** 2 + \
                    (self.cary - self.data['y'][i]) ** 2
-            #if i == 998:
-                 #self.logger.info("////////////// %s" % (dist_sqr))
-                 #elf.logger.info("////////////// %s" % (self.data['x'][0]))
-                 #self.logger.info("////////////// %s" % (self.data['y'][0]))
             if dist_sqr <= shortest_dist_sqr:
                 start = i
                 shortest_dist_sqr = dist_sqr
-        #self.logger.info("==================== %s" % (start))
         return start
 
     def closest_time(self):
@@ -178,7 +159,7 @@ class RtkPlayer(object):
     def publish_planningmsg(self):
         """
         Generate New Path
-        """ 
+        """
         if not self.localization_received:
             self.logger.warning(
                 "locaization not received yet when publish_planningmsg")
@@ -225,9 +206,6 @@ class RtkPlayer(object):
             adc_point.path_point.y = self.data['y'][i]
             adc_point.path_point.z = self.data['z'][i]
             adc_point.v = self.data['speed'][i] * self.speedmultiplier
-            if adc_point.v >= 1:
-                adc_point.v=1
-            self.logger.info("aaaaaaaaaaaaaaaaa %s" % (adc_point.v))
             adc_point.a = self.data['acceleration'][i] * self.speedmultiplier
             adc_point.path_point.kappa = self.data['curvature'][i]
             adc_point.path_point.dkappa = self.data['curvature_change_rate'][i]

@@ -9,7 +9,16 @@ cc_library(
     ],
     hdrs = [
         "msf_localization.h",
+        "include/StatusPb.h",
+        "include/Header.h",
+        "include/PointENU.h",
+        "include/Point3D.h",
+        "include/Quaternion.h",
+        "include/Pose.h",
+        "include/Uncertainty.h",
+        "include/localization.h"
     ],
+    copts = ["-Imodules/localization/msf"],
     linkopts = [
         "-lboost_system",
     ],
@@ -48,6 +57,7 @@ cc_test(
     srcs = [
         "msf_localization_test.cc",
     ],
+    copts = ["-Imodules/localization/msf"],
     data = ["//modules/localization:localization_testdata"],
     deps = [
         ":msf_localization",

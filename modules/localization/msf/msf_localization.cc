@@ -45,7 +45,10 @@ MSFLocalization::MSFLocalization()
       localization_state_(msf::LocalizationMeasureState::OK),
       pcd_msg_index_(-1),
       latest_lidar_localization_status_(MeasureState::NOT_VALID),
-      latest_gnss_localization_status_(MeasureState::NOT_VALID) {}
+      latest_gnss_localization_status_(MeasureState::NOT_VALID)
+{
+  pub_localization = nh_localization.advertise<readgps::localization>("/apollo/ros/localization/pose", 10);
+}
 
 Status MSFLocalization::Start() {
   AdapterManager::Init(FLAGS_msf_adapter_config_file);
@@ -326,6 +329,47 @@ void MSFLocalization::OnRawImu(const drivers::gnss::Imu &imu_msg) {
 
       PublishPoseBroadcastTF(local_result);
       AdapterManager::PublishLocalization(local_result);
+
+      localization4ros.header.timestamp_sec = local_result.mutable_header()->timestamp_sec();
+      localization4ros.pose.position.x = posepb_loc->mutable_position()->x();
+      localization4ros.pose.position.y = posepb_loc->mutable_position()->y();
+      localization4ros.pose.position.z = posepb_loc->mutable_position()->z();
+      localization4ros.pose.orientation.qx = posepb_loc->mutable_orientation()->qx();
+      localization4ros.pose.orientation.qy = posepb_loc->mutable_orientation()->qy();
+      localization4ros.pose.orientation.qz = posepb_loc->mutable_orientation()->qz();
+      localization4ros.pose.orientation.qw = posepb_loc->mutable_orientation()->qw();
+      localization4ros.pose.linear_velocity.x = posepb_loc->mutable_linear_velocity()->x();
+      localization4ros.pose.linear_velocity.y = posepb_loc->mutable_linear_velocity()->y();
+      localization4ros.pose.linear_velocity.z = posepb_loc->mutable_linear_velocity()->z();
+      localization4ros.pose.linear_acceleration.x = posepb_loc->mutable_linear_acceleration()->x();
+      localization4ros.pose.linear_acceleration.y = posepb_loc->mutable_linear_acceleration()->y();
+      localization4ros.pose.linear_acceleration.z = posepb_loc->mutable_linear_acceleration()->z();
+      localization4ros.pose.angular_velocity.x = posepb_loc->mutable_angular_velocity()->x();
+      localization4ros.pose.angular_velocity.y = posepb_loc->mutable_angular_velocity()->y();
+      localization4ros.pose.angular_velocity.z = posepb_loc->mutable_angular_velocity()->z();
+      localization4ros.pose.heading = posepb_loc->heading();
+      localization4ros.pose.linear_acceleration_vrf.x = posepb_loc->mutable_linear_acceleration_vrf()->x();
+      localization4ros.pose.linear_acceleration_vrf.y = posepb_loc->mutable_linear_acceleration_vrf()->y();
+      localization4ros.pose.linear_acceleration_vrf.z = posepb_loc->mutable_linear_acceleration_vrf()->z();
+      localization4ros.pose.angular_velocity_vrf.x = posepb_loc->mutable_angular_velocity_vrf()->x();
+      localization4ros.pose.angular_velocity_vrf.y = posepb_loc->mutable_angular_velocity_vrf()->y();
+      localization4ros.pose.angular_velocity_vrf.z = posepb_loc->mutable_angular_velocity_vrf()->z();
+      localization4ros.pose.euler_angles.x = eulerangles->x();
+      localization4ros.pose.euler_angles.y = eulerangles->y();
+      localization4ros.pose.euler_angles.z = eulerangles->z();
+      apollo::localization::Uncertainty *uncertainty =
+      local_result.mutable_uncertainty();
+      localization4ros.uncertainty.position_std_dev.x = uncertainty->mutable_position_std_dev()->x();
+      localization4ros.uncertainty.position_std_dev.y = uncertainty->mutable_position_std_dev()->y();
+      localization4ros.uncertainty.position_std_dev.z = uncertainty->mutable_position_std_dev()->z();
+      localization4ros.uncertainty.orientation_std_dev.x = uncertainty->mutable_orientation_std_dev()->x();
+      localization4ros.uncertainty.orientation_std_dev.y = uncertainty->mutable_orientation_std_dev()->y();
+      localization4ros.uncertainty.orientation_std_dev.z = uncertainty->mutable_orientation_std_dev()->z();
+      localization4ros.uncertainty.linear_velocity_std_dev.x = uncertainty->mutable_linear_velocity_std_dev()->x();
+      localization4ros.uncertainty.linear_velocity_std_dev.y = uncertainty->mutable_linear_velocity_std_dev()->y();
+      localization4ros.uncertainty.linear_velocity_std_dev.z = uncertainty->mutable_linear_velocity_std_dev()->z();
+      localization4ros.measurement_time = local_result.measurement_time();
+      pub_localization.publish(localization4ros);
     }
   }
 

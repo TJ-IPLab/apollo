@@ -46,6 +46,8 @@
 #include "modules/localization/localization_base.h"
 #include "modules/localization/msf/local_integ/localization_integ.h"
 
+#include "modules/localization/msf/include/localization.h"
+
 /**
  * @namespace apollo::localization
  * @brief apollo::localization
@@ -108,6 +110,9 @@ class MSFLocalization : public LocalizationBase {
 
   // rotation from the vehicle coord to imu coord
   Eigen::Quaternion<double> imu_vehicle_quat_;
+  readgps::localization localization4ros;
+  ros::NodeHandle nh_localization;
+  ros::Publisher pub_localization;
 };
 
 }  // namespace localization

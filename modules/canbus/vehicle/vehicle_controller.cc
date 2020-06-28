@@ -59,28 +59,28 @@ ErrorCode VehicleController::SetDrivingMode(
   switch (driving_mode) {
     case Chassis::COMPLETE_AUTO_DRIVE: {
       if (EnableAutoMode() != ErrorCode::OK) {
-        AERROR << "Failed to enable auto mode.";
+        AERROR << "Fail to EnableAutoMode.";
         return ErrorCode::CANBUS_ERROR;
       }
       break;
     }
     case Chassis::COMPLETE_MANUAL: {
       if (DisableAutoMode() != ErrorCode::OK) {
-        AERROR << "Failed to disable auto mode.";
+        AERROR << "Fail to DisableAutoMode.";
         return ErrorCode::CANBUS_ERROR;
       }
       break;
     }
     case Chassis::AUTO_STEER_ONLY: {
       if (EnableSteeringOnlyMode() != ErrorCode::OK) {
-        AERROR << "Failed to enable steer only mode.";
+        AERROR << "Fail to EnableSpeedOnlyMode.";
         return ErrorCode::CANBUS_ERROR;
       }
       break;
     }
     case Chassis::AUTO_SPEED_ONLY: {
       if (EnableSpeedOnlyMode() != ErrorCode::OK) {
-        AERROR << "Failed to enable speed only mode";
+        AERROR << "Fail to EnableSpeedOnlyMode";
         return ErrorCode::CANBUS_ERROR;
       }
       break;
@@ -93,16 +93,16 @@ ErrorCode VehicleController::SetDrivingMode(
 
 ErrorCode VehicleController::Update(const ControlCommand &command) {
   if (!is_initialized_) {
-    AERROR << "Controller is not initialized.";
+    AERROR << "Controller not initialized.";
     return ErrorCode::CANBUS_ERROR;
   }
 
   ControlCommand control_command;
   control_command.CopyFrom(command);
 
-  // Execute action to transform driving mode
+  // execute action to tranform driving mode
   if (control_command.has_pad_msg() && control_command.pad_msg().has_action()) {
-    AINFO << "Canbus received pad msg: "
+    AINFO << "Canbus received pad msg:"
           << control_command.pad_msg().ShortDebugString();
     Chassis::DrivingMode mode = Chassis::COMPLETE_MANUAL;
     switch (control_command.pad_msg().action()) {
@@ -112,7 +112,7 @@ ErrorCode VehicleController::Update(const ControlCommand &command) {
       }
       case control::DrivingAction::STOP:
       case control::DrivingAction::RESET: {
-        // In COMPLETE_MANUAL mode
+        mode = Chassis::COMPLETE_MANUAL;
         break;
       }
       default: {
@@ -127,10 +127,8 @@ ErrorCode VehicleController::Update(const ControlCommand &command) {
       driving_mode_ == Chassis::AUTO_SPEED_ONLY) {
     Gear(control_command.gear_location());
     Throttle(control_command.throttle());
-    Acceleration(control_command.acceleration());
     Brake(control_command.brake());
     SetEpbBreak(control_command);
-    SetLimits();
   }
 
   if (driving_mode_ == Chassis::COMPLETE_AUTO_DRIVE ||

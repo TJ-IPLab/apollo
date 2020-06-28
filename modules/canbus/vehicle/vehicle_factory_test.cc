@@ -25,7 +25,12 @@ namespace canbus {
 
 class VehicleFactoryTest : public ::testing::Test {
  public:
-  virtual void SetUp() { factory_.RegisterVehicleFactory(); }
+  VehicleFactoryTest() : factory_() {}
+
+  virtual void SetUp() {
+    factory_.RegisterVehicleFactory();
+  }
+  virtual void TearDown() {}
 
  protected:
   VehicleFactory factory_;
@@ -35,14 +40,12 @@ TEST_F(VehicleFactoryTest, CreateVehicle) {
   VehicleParameter parameter;
 
   parameter.set_brand(VehicleParameter::GEM);
-  EXPECT_NE(factory_.CreateVehicle(parameter), nullptr);
+  EXPECT_TRUE(factory_.CreateVehicle(parameter) != nullptr);
 
   parameter.set_brand(VehicleParameter::LINCOLN_MKZ);
-  EXPECT_NE(factory_.CreateVehicle(parameter), nullptr);
-
-  parameter.set_brand(VehicleParameter::CH);
-  EXPECT_NE(factory_.CreateVehicle(parameter), nullptr);
+  EXPECT_TRUE(factory_.CreateVehicle(parameter) != nullptr);
 }
 
 }  // namespace canbus
 }  // namespace apollo
+

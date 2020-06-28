@@ -21,7 +21,6 @@
 #pragma once
 
 #include <memory>
-
 #include "modules/canbus/proto/vehicle_parameter.pb.h"
 #include "modules/canbus/vehicle/abstract_vehicle_factory.h"
 #include "modules/canbus/vehicle/vehicle_controller.h"
@@ -43,8 +42,8 @@ namespace canbus {
 class ChVehicleFactory : public AbstractVehicleFactory {
  public:
   /**
-   * @brief destructor
-   */
+  * @brief destructor
+  */
   virtual ~ChVehicleFactory() = default;
 
   /**
@@ -63,3 +62,4 @@ class ChVehicleFactory : public AbstractVehicleFactory {
 
 }  // namespace canbus
 }  // namespace apollo
+

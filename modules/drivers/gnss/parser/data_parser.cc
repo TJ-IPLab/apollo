@@ -20,6 +20,8 @@
 #include <cmath>
 #include <memory>
 #include <string>
+#include <fstream>
+#include <iostream>
 
 #include "Eigen/Geometry"
 #include "boost/array.hpp"
@@ -136,6 +138,11 @@ void DataParser::ParseRawData(const std_msgs::String::ConstPtr &msg) {
   while (ros::ok()) {
     type = data_parser_->GetMessage(&msg_ptr);
     if (type == Parser::MessageType::NONE) break;
+    std::ofstream outfile;
+    outfile.open("/apollo/modules/drivers/gnss/parser/prove.txt");
+    outfile << "data_parser_->latitude4ros: " << data_parser_->getlatitude4ros() << std::endl;
+    outfile.close();
+    std::cout << "data_parser_->latitude4ros: " << data_parser_->getlatitude4ros() << std::endl;
     DispatchMessage(type, msg_ptr);
   }
 }

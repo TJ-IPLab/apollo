@@ -76,6 +76,14 @@ class Parser {
     Update(reinterpret_cast<const uint8_t *>(data.data()), data.size());
   }
 
+  void setlatitude4ros(const double lat) {
+    latitude4ros = lat;
+  }
+
+  double getlatitude4ros() {
+    return latitude4ros;
+  }
+
   enum class MessageType {
     NONE,
     GNSS,
@@ -106,6 +114,7 @@ class Parser {
   // Point to the beginning and end of data. Do not take ownership.
   const uint8_t *data_ = nullptr;
   const uint8_t *data_end_ = nullptr;
+  double latitude4ros;
 
  private:
   DISABLE_COPY_AND_ASSIGN(Parser);

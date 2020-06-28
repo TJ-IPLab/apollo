@@ -108,8 +108,6 @@ class LincolnController final : public VehicleController {
   // gas:0.00~99.99 unit:%
   void Throttle(double throttle) override;
 
-  void Acceleration(double acc) override;
-
   // steering with old angle speed
   // angle:-99.99~0.00~99.99, unit:%, left:+, right:-
   void Steer(double angle) override;

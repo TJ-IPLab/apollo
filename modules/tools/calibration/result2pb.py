@@ -27,36 +27,36 @@ from modules.control.proto.control_conf_pb2 import ControlConf
 def load_calibration_raw_data(fn):
     speed_table = {}
     with open(fn, 'r') as f:
-        for line in f:
-            items = line.split(',')
-            cmd = round(float(items[0]))
-            speed = float(items[1])
-            acc = round(float(items[2]), 2)
-            if speed in speed_table:
-                cmd_table = speed_table[speed]
-                if cmd in cmd_table:
-                    cmd_table[cmd].append(acc)
-                else:
-                    cmd_table[cmd] = [acc]
-            else:
-                cmd_table = {}
-                cmd_table[cmd] = [acc]
-                speed_table[speed] = cmd_table
-    for speed, cmd_table in speed_table.items():
-        new_cmd_table = {}
-        for cmd, acc_list in cmd_table.items():
-            new_cmd_table[cmd] = round(np.mean(acc_list), 2)
-        speed_table[speed] = new_cmd_table
+    	for line in f:
+    	    items = line.split(',')
+    	    cmd = round(float(items[0]))
+    	    speed = float(items[1])
+    	    acc = round(float(items[2]), 2)
+    	    if speed in speed_table:
+    	        cmd_table = speed_table[speed]
+    	        if cmd in cmd_table:
+    	            cmd_table[cmd].append(acc)
+    	        else:
+    	            cmd_table[cmd] = [acc]
+    	    else:
+    	        cmd_table = {}
+    	        cmd_table[cmd] = [acc]
+    	        speed_table[speed] = cmd_table
+        for speed, cmd_table in speed_table.items():
+            new_cmd_table = {}
+            for cmd, acc_list in cmd_table.items():
+                new_cmd_table[cmd] = round(np.mean(acc_list), 2)
+            speed_table[speed] = new_cmd_table
 
-    speed_table2 = {}
-    for speed, cmd_table in speed_table.items():
-        acc_table = {}
-        for cmd, acc in cmd_table.items():
-            if acc in acc_table:
-                acc_table[acc].append(cmd)
-            else:
-                acc_table[acc] = [cmd]
-        speed_table2[speed] = acc_table
+        speed_table2 = {}
+        for speed, cmd_table in speed_table.items():
+            acc_table = {}
+            for cmd, acc in cmd_table.items():
+                if acc in acc_table:
+                    acc_table[acc].append(cmd)
+                else:
+                    acc_table[acc] = [cmd]
+            speed_table2[speed] = acc_table
     return speed_table2
 
 def load_calibration_raw_data_old(fn):

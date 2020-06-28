@@ -1,7 +1,7 @@
 vehicle_parameter {
-  brand: LINCOLN_MKZ
+  brand: CH 
   max_enable_fail_attempt: 5
-  driving_mode: COMPLETE_AUTO_DRIVE
+  driving_mode: AUTO_SPEED_ONLY 
 }
 
 can_card_parameter {

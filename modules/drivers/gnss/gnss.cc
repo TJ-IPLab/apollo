@@ -38,7 +38,6 @@ std::string GnssDriver::Name() const { return FLAGS_sensor_node_name; }
 apollo::common::Status GnssDriver::Init() {
   AdapterManager::Init(FLAGS_adapter_config_filename);
   AINFO << "The adapter manager is successfully initialized.";
-
   config::Config config;
   // load camera config
   if (!::apollo::common::util::GetProtoFromFile(FLAGS_sensor_conf_file,

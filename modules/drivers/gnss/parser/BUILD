@@ -42,6 +42,12 @@ cc_library(
     srcs = ["novatel_parser.cc"],
     hdrs = [
         "parser.h",
+        "include/imu.h",
+        "include/gps.h",
+        "include/Heading.h",
+        "include/header.h",
+        "include/statuspb.h",
+        "include/Point3D.h",
         "novatel_messages.h",
         "rtcm_decode.h"
         ],
@@ -62,6 +68,12 @@ cc_library(
     hdrs = [
         "novatel_messages.h",
         "parser.h",
+        "include/imu.h",
+        "include/gps.h",
+        "include/Heading.h",
+        "include/header.h",
+        "include/statuspb.h",
+        "include/Point3D.h",
         "newtonm2_parser.h",
         "rtcm_decode.h",
     ],
@@ -81,6 +93,12 @@ cc_library(
     srcs = ["rtcm_parser.cc"],
     hdrs = [
         "parser.h",
+        "include/imu.h",
+        "include/gps.h",
+        "include/Heading.h",
+        "include/header.h",
+        "include/statuspb.h",
+        "include/Point3D.h",
         "rtcm_parser.h"
         ],
     deps = [
@@ -100,6 +118,12 @@ cc_library(
     srcs = ["rtcm3_parser.cc"],
     hdrs = [
         "parser.h",
+        "include/imu.h",
+        "include/gps.h",
+        "include/Heading.h",
+        "include/header.h",
+        "include/statuspb.h",
+        "include/Point3D.h",
         "rtcm_parser.h",
         "rtcm_decode.h"
         ],

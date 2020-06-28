@@ -355,8 +355,6 @@ bool NewtonM2Parser::HandleGnssBestpos(const novatel::BestPos* pos,
   bestpos_.set_sol_type(
       static_cast<apollo::drivers::gnss::SolutionType>(pos->position_type));
   bestpos_.set_latitude(pos->latitude);
-  latitude4ros = pos->latitude;
-  std::cout << "pos->latitude" << pos->latitude << "\tlatitude4ros: " << latitude4ros << std::endl;
   bestpos_.set_longitude(pos->longitude);
   bestpos_.set_height_msl(pos->height_msl);
   bestpos_.set_undulation(pos->undulation);

@@ -103,6 +103,9 @@ DataParser::DataParser(const config::Config &config) : config_(config) {
   gnss_status_.set_position_type(0);
   gnss_status_.set_solution_completed(false);
   ins_status_.set_type(InsStatus::INVALID);
+  pubgps = nh.advertise<readgps::gps>("/apollo/ros/sensor/gnss/best_pose",10);
+  pubheading = nh.advertise<readgps::Heading>("/apollo/ros/sensor/gnss/heading",10);
+  pubimu = nh.advertise<readgps::imu>("/apollo/ros/sensor/gnss/imu",10);
 }
 
 bool DataParser::Init() {
@@ -138,12 +141,12 @@ void DataParser::ParseRawData(const std_msgs::String::ConstPtr &msg) {
   while (ros::ok()) {
     type = data_parser_->GetMessage(&msg_ptr);
     if (type == Parser::MessageType::NONE) break;
-    std::ofstream outfile;
-    outfile.open("/apollo/modules/drivers/gnss/parser/prove.txt");
-    outfile << "data_parser_->latitude4ros: " << data_parser_->getlatitude4ros() << std::endl;
-    outfile.close();
-    std::cout << "data_parser_->latitude4ros: " << data_parser_->getlatitude4ros() << std::endl;
     DispatchMessage(type, msg_ptr);
+
+    // std::ofstream outfile;
+    // outfile.open("/apollo/modules/drivers/gnss/parser/prove.txt");
+    // outfile << "data_parser_->latitude4ros: " << data_parser_->getlatitude4ros() << std::endl;
+    // outfile.close();
   }
 }
 
@@ -240,6 +243,31 @@ void DataParser::PublishBestpos(const MessagePtr message) {
   GnssBestPose bestpos = GnssBestPose(*As<GnssBestPose>(message));
   AdapterManager::FillGnssBestPoseHeader(FLAGS_sensor_node_name, &bestpos);
   AdapterManager::PublishGnssBestPose(bestpos);
+  bestpos4ros_highlevel.header.timestamp_sec = bestpos.header().timestamp_sec();
+  bestpos4ros_highlevel.header.module_name = bestpos.header().module_name();
+  bestpos4ros_highlevel.header.sequence_num = bestpos.header().sequence_num();
+  bestpos4ros_highlevel.measurement_time = bestpos.measurement_time();
+  bestpos4ros_highlevel.sol_status = bestpos.sol_status();
+  bestpos4ros_highlevel.sol_type = bestpos.sol_type();
+  bestpos4ros_highlevel.latitude = bestpos.latitude();
+  bestpos4ros_highlevel.longitude = bestpos.longitude();
+  bestpos4ros_highlevel.height_msl = bestpos.height_msl();
+  bestpos4ros_highlevel.undulation = bestpos.undulation();
+  bestpos4ros_highlevel.datum_id = bestpos.datum_id();
+  bestpos4ros_highlevel.latitude_std_dev = bestpos.latitude_std_dev();
+  bestpos4ros_highlevel.longitude_std_dev = bestpos.longitude_std_dev();
+  bestpos4ros_highlevel.height_std_dev = bestpos.height_std_dev();
+  bestpos4ros_highlevel.base_station_id = bestpos.base_station_id();
+  bestpos4ros_highlevel.differential_age = bestpos.differential_age();
+  bestpos4ros_highlevel.solution_age = bestpos.solution_age();
+  bestpos4ros_highlevel.num_sats_tracked = bestpos.num_sats_tracked();
+  bestpos4ros_highlevel.num_sats_in_solution = bestpos.num_sats_in_solution();
+  bestpos4ros_highlevel.num_sats_l1 = bestpos.num_sats_l1();
+  bestpos4ros_highlevel.num_sats_multi = bestpos.num_sats_multi();
+  bestpos4ros_highlevel.extended_solution_status = bestpos.extended_solution_status();
+  bestpos4ros_highlevel.galileo_beidou_used_mask = bestpos.galileo_beidou_used_mask();
+  bestpos4ros_highlevel.gps_glonass_used_mask = bestpos.gps_glonass_used_mask();
+  pubgps.publish(bestpos4ros_highlevel);
 }
 
 void DataParser::PublishImu(const MessagePtr message) {
@@ -256,6 +284,17 @@ void DataParser::PublishImu(const MessagePtr message) {
 
   AdapterManager::FillRawImuHeader(FLAGS_sensor_node_name, &raw_imu);
   AdapterManager::PublishRawImu(raw_imu);
+  imu4ros.header.timestamp_sec = raw_imu.header().timestamp_sec();
+  imu4ros.header.module_name = raw_imu.header().module_name();
+  imu4ros.header.sequence_num = raw_imu.header().sequence_num();
+  imu4ros.measurement_time = raw_imu.measurement_time();
+  imu4ros.linear_acceleration.x = raw_imu.mutable_linear_acceleration()->x();
+  imu4ros.linear_acceleration.y = raw_imu.mutable_linear_acceleration()->y();
+  imu4ros.linear_acceleration.z = raw_imu.mutable_linear_acceleration()->z();
+  imu4ros.angular_velocity.x = raw_imu.mutable_angular_velocity()->x();
+  imu4ros.angular_velocity.y = raw_imu.mutable_angular_velocity()->y();
+  imu4ros.angular_velocity.z = raw_imu.mutable_angular_velocity()->z();
+  pubimu.publish(imu4ros);
 }
 
 void DataParser::PublishOdometry(const MessagePtr message) {
@@ -339,6 +378,28 @@ void DataParser::PublishHeading(const MessagePtr message) {
   Heading heading = Heading(*As<Heading>(message));
   AdapterManager::FillGnssHeadingHeader(FLAGS_sensor_node_name, &heading);
   AdapterManager::PublishGnssHeading(heading);
+  heading4ros.header.timestamp_sec = heading.header().timestamp_sec();
+  heading4ros.header.module_name = heading.header().module_name();
+  heading4ros.header.sequence_num = heading.header().sequence_num();
+  heading4ros.measurement_time = heading.measurement_time();
+  heading4ros.solution_status = heading.solution_status();
+  heading4ros.position_type = heading.position_type();
+  heading4ros.baseline_length = heading.baseline_length();
+  heading4ros.heading = heading.heading();
+  heading4ros.pitch = heading.pitch();
+  heading4ros.reserved = heading.reserved();
+  heading4ros.heading_std_dev = heading.heading_std_dev();
+  heading4ros.pitch_std_dev = heading.pitch_std_dev();
+  heading4ros.station_id = heading.station_id();
+  heading4ros.satellite_tracked_number = heading.satellite_tracked_number();
+  heading4ros.satellite_soulution_number = heading.satellite_soulution_number();
+  heading4ros.satellite_number_obs = heading.satellite_number_obs();
+  heading4ros.satellite_number_multi = heading.satellite_number_multi();
+  heading4ros.solution_source = heading.solution_source();
+  heading4ros.extended_solution_status = heading.extended_solution_status();
+  heading4ros.galileo_beidou_sig_mask = heading.galileo_beidou_sig_mask();
+  heading4ros.gps_glonass_sig_mask = heading.gps_glonass_sig_mask();
+  pubheading.publish(heading4ros);
 }
 
 void DataParser::GpsToTransformStamped(

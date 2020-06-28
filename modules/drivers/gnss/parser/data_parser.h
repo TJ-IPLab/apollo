@@ -67,6 +67,13 @@ class DataParser {
   bool inited_flag_ = false;
   config::Config config_;
   std::unique_ptr<Parser> data_parser_;
+  readgps::gps bestpos4ros_highlevel;
+  readgps::Heading heading4ros;
+  readgps::imu imu4ros;
+  ros::NodeHandle nh;
+  ros::Publisher pubgps;
+  ros::Publisher pubheading;
+  ros::Publisher pubimu;
   tf2_ros::TransformBroadcaster tf_broadcaster_;
 
   GnssStatus gnss_status_;

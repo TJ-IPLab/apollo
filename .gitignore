@@ -45,6 +45,10 @@ nohup.out
 # ROS
 ros_param_server.pid
 .master_snapshot
+catkin_ws
+rosindocker
+slambackup
+tongjiZNS_data
 
 # third_party
 third_party/ros
@@ -53,6 +57,7 @@ third_party/ros_x86_64/
 modules/ros/third_party/fast-rtps
 
 # Data
+data
 data/prediction
 data/log
 data/core
@@ -85,6 +90,11 @@ modules/drivers/gnss/conf/conf_us
 
 # calibration files
 modules/calibration/data/mkz056
+msf
 
 # Data bag
 docs/demo_guide/*.bag
+bagfile
+bagfiles
+*.bag
+

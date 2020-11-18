@@ -242,8 +242,8 @@ void LogFileObject::Write(bool force_flush, time_t timestamp,
     // base filename always selected.
     if (base_filename_selected_) {
       if (!CreateLogfile(time_pid_string)) {
-        perror("Could not create log file");
-        fprintf(stderr, "COULD NOT CREATE LOGFILE '%s'!\n",
+        perror("C2ould not create log file");
+        fprintf(stderr, "C2OULD NOT CREATE LOGFILE '%s'!\n",
                 time_pid_string.c_str());
         return;
       }

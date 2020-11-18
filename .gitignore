@@ -39,6 +39,8 @@ nohup.out
 /data
 modules/tools/ota/update.ini
 modules/tools/ota/vehicle_info.pb.txt
+data_TJZNS/
+TJZNtools/data
 
 # Localization
 modules/localization/msf/local_map/test_data/ndt_map/map_data/
@@ -60,7 +62,7 @@ py_proto
 
 # calibration files
 modules/calibration/data/
-
+sensor_calibration/
 # Package archive
 docker/build/archive/
 

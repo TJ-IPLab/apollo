@@ -8,7 +8,7 @@ parse: radar
   # camera
 
 lidar:     # for velodyne vls-128 lidar
-  channel_name: /apollo/sensor/lidar128/PointCloud2
+  channel_name: /apollo/sensor/lidar16/PointCloud2
   out_folder_extn: _lidar_vls128
   timestamp_file_extn: _lidar_vls128_timestamp.txt
 

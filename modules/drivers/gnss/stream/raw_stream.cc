@@ -154,6 +154,7 @@ RawStream::~RawStream() {
   if (rtk_thread_ptr_ != nullptr && rtk_thread_ptr_->joinable()) {
     rtk_thread_ptr_->join();
   }
+  // fclose(fp_);
 }
 
 bool RawStream::Init() {
@@ -296,6 +297,10 @@ bool RawStream::Init() {
       FLAGS_chassis_topic,
       [&](const std::shared_ptr<Chassis> &chassis) { chassis_ptr_ = chassis; });
 
+  // if ((fp_ = fopen("/apollo/data_TJZNS/gnss_stream.txt", "wb")) == NULL) {
+  //   AINFO << "wangguanbei: cant open the file" << buffer_;
+  //   exit(0);
+  // }
   return true;
 }
 
@@ -479,6 +484,9 @@ void RawStream::DataSpin() {
   stream_writer_->Write(stream_status_);
   while (cyber::OK()) {
     size_t length = data_stream_->read(buffer_, BUFFER_SIZE);
+    // AINFO << "wangguanbei: buffer_ is " << buffer_;
+    // if (fwrite(buffer_, sizeof(uint8_t), BUFFER_SIZE, fp_) != 1)
+    //   AINFO << "file write error\n";
     if (length > 0) {
       std::shared_ptr<RawData> msg_pub = std::make_shared<RawData>();
       if (!msg_pub) {
@@ -487,6 +495,7 @@ void RawStream::DataSpin() {
       }
       msg_pub->set_data(reinterpret_cast<const char *>(buffer_), length);
       raw_writer_->Write(msg_pub);
+      // AINFO << "wangguanbei: msg_pub->data() is " << msg_pub->data();
       data_parser_ptr_->ParseRawData(msg_pub->data());
       if (push_location_) {
         PushGpgga(length);

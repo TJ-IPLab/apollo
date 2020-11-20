@@ -102,7 +102,8 @@ void CameraComponent::run() {
     auto pb_image = pb_image_buffer_.at(index_++);
     pb_image->mutable_header()->set_timestamp_sec(
         cyber::Time::Now().ToSecond());
-    pb_image->set_measurement_time(image_time.ToSecond());
+    // pb_image->set_measurement_time(image_time.ToSecond());
+    pb_image->set_measurement_time(cyber::Time::Now().ToSecond());
     pb_image->set_data(raw_image_->image, raw_image_->image_size);
     writer_->Write(pb_image);
 

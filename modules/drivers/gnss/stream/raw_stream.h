@@ -68,6 +68,7 @@ class RawStream {
   static constexpr size_t BUFFER_SIZE = 2048;
   uint8_t buffer_[BUFFER_SIZE] = {0};
   uint8_t buffer_rtk_[BUFFER_SIZE] = {0};
+  FILE *fp_;
 
   std::shared_ptr<Stream> data_stream_;
   std::shared_ptr<Stream> command_stream_;

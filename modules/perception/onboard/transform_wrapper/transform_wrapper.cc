@@ -161,6 +161,7 @@ bool TransformWrapper::GetSensor2worldTrans(
       if (!transform_cache_.QueryTransform(
               timestamp, &trans_novatel2world,
               FLAGS_obs_max_local_pose_extrapolation_latency)) {
+        // AINFO << "wgb Get sensor2novatel extrinsics failed. ";
         return false;
       }
     } else {

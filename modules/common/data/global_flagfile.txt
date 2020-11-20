@@ -18,3 +18,5 @@
 --use_cyber_time=true
 
 --half_vehicle_width=0.43
+
+--map_dir=/apollo/modules/map/data/demo

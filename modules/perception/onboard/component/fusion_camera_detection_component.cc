@@ -69,6 +69,8 @@ bool SetCameraHeight(const std::string &sensor_name,
   float base_h = default_camera_height;
   float camera_offset = 0.0f;
   try {
+    // AINFO << params_dir + "/" + "velodyne128_height.yaml";
+    // AINFO << params_dir + "/" + sensor_name + "_extrinsics.yaml";
     YAML::Node lidar_height =
         YAML::LoadFile(params_dir + "/" + "velodyne128_height.yaml");
     base_h = lidar_height["vehicle"]["parameters"]["height"].as<float>();
@@ -313,6 +315,7 @@ void FusionCameraDetectionComponent::OnReceiveImage(
         << "ret: " << send_sensorframe_ret;
   // Send output msg
   if (output_final_obstacles_) {
+    // AINFO << "wgb: writer_->Write(out_message);";
     writer_->Write(out_message);
   }
   // for e2e lantency statistics
